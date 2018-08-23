@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:st="http://www.hubject.com/eMobility/SBP" xmlns:tns="http://www.hubject.com/b2b/services/commontypes/v2.1" elementFormDefault="qualified" targetNamespace="http://www.hubject.com/b2b/services/commontypes/v2.1">
+	<xs:import namespace="http://www.hubject.com/eMobility/SBP" schemaLocation="eRoamingSimpleTypes.xsd"/>
+	<xs:element name="eRoamingAcknowledgement" type="tns:eRoamingAcknowledgement">
+		<xs:annotation>
+			<xs:documentation>The acknowledgement is a message that is sent in response to several requests.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:simpleType name="ProviderIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z]{2}\-?[A-Za-z0-9]{3}|[A-Za-z]{2}[\*|-]?[A-Za-z0-9]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OperatorIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z]{2}\*?[A-Za-z0-9]{3})|(\+?[0-9]{1,3}\*[0-9]{3})"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EvcoIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z]{2}\-?[A-Za-z0-9]{3}\-?C[A-Za-z0-9]{8}\-?[\d|A-Za-z])|([A-Za-z]{2}[\*|\-]?[A-Za-z0-9]{3}[\*|\-]?[A-Za-z0-9]{6}[\*|\-]?[\d|X])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EvseIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z]{2}\*?[A-Za-z0-9]{3}\*?E[A-Za-z0-9\*]{1,30})|(\+?[0-9]{1,3}\*[0-9]{3}\*[0-9\*]{1,32})"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RFIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="mifareCls"/>
+			<xs:pattern value="mifareDes"/>
+			<xs:pattern value="calypso"/>
+			<xs:pattern value="nfc"/>
+			<xs:pattern value="mifareFamily"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AddressIso19773Type">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="Country" type="tns:CountryCodeType"/>
+			<xs:element maxOccurs="1" minOccurs="1" name="City" type="st:String1-50"/>
+			<xs:element maxOccurs="1" minOccurs="1" name="Street">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="2"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="PostalCode" type="st:String10"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="HouseNum" type="st:String10"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="Floor" type="st:String5"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="Region" type="st:String50"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="TimeZone">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[U][T][C][+,-][0-9][0-9][:][0-9][0-9]"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RFIDmifarefamilyIdentificationType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="UID" type="tns:UIDType">
+				<xs:annotation>
+					<xs:documentation>The UID from the RFID-Card. It should be read from left to right using big-endian format. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RFIDIdentificationType">
+		<xs:sequence>
+			<xs:element name="UID" type="tns:UIDType">
+				<xs:annotation>
+					<xs:documentation>The UID from the RFID-Card. It should be read from left to right using big-endian format.
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EvcoID" type="tns:EvcoIDType">
+				<xs:annotation>
+					<xs:documentation>Contract identifier
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RFIDType" type="tns:RFIDType">
+				<xs:annotation>
+					<xs:documentation>The Type of the used RFID card like mifareclassic, desfire
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="PrintedNumber">
+				<xs:annotation>
+					<xs:documentation>A number printed on a customer’s card for manual authorization (e.q. via a call center)
+                    </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="150"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element minOccurs="0" name="ExpiryDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Until when this card is valid. Should not be set if card does not have an expiration yet
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="UIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9A-F]{8,8}|[0-9A-F]{14,14}|[0-9A-F]{20,20}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="QRCodeIdentificationType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="EvcoID" type="tns:EvcoIDType">
+				<xs:annotation>
+					<xs:documentation>Contract identifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice maxOccurs="1" minOccurs="0">
+				<xs:element maxOccurs="1" minOccurs="1" name="PIN" type="st:String20"/>
+				<xs:element maxOccurs="1" minOccurs="1" name="HashedPIN" type="tns:HashType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlugAndChargeIdentificationType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="EvcoID" type="tns:EvcoIDType">
+				<xs:annotation>
+					<xs:documentation>Contract identifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RemoteIdentificationType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="EvcoID" type="tns:EvcoIDType">
+				<xs:annotation>
+					<xs:documentation>Contract identifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HashType">
+		<xs:annotation>
+			<xs:documentation>According to different processes, the PIN is transferred as encrypted hash or in clear text</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Value" type="tns:HashValueType">
+				<xs:annotation>
+					<xs:documentation>Hash value</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Function" type="tns:HashFunctionType">
+				<xs:annotation>
+					<xs:documentation>Hash function (as of OICP v2.2 it is always Bcrypt)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="HashFunctionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Bcrypt"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HashValueType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9A-Za-z\.+/=$]{10,100}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="IdentificationType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="RFIDMifareFamilyIdentification" type="tns:RFIDmifarefamilyIdentificationType"/>
+				<xs:element name="RFIDIdentification" type="tns:RFIDIdentificationType"/>
+				<xs:element name="QRCodeIdentification" type="tns:QRCodeIdentificationType"/>
+				<xs:element name="PlugAndChargeIdentification" type="tns:PlugAndChargeIdentificationType"/>
+				<xs:element name="RemoteIdentification" type="tns:RemoteIdentificationType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAcknowledgement">
+		<xs:sequence>
+			<xs:element name="Result" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Message was received, the respective operation was performed or not performed successfully.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="1" name="StatusCode" type="tns:StatusCodeType"/>
+			<xs:element minOccurs="0" name="SessionID" type="tns:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>Represents the service process.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatusCodeType">
+		<xs:sequence>
+			<xs:element name="Code" type="tns:CodeType"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="Description" type="st:String200"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="AdditionalInfo" type="st:String1000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="000"/>
+			<xs:enumeration value="001"/>
+			<xs:enumeration value="002"/>
+			<xs:enumeration value="009"/>
+			<xs:enumeration value="017"/>
+			<xs:enumeration value="018"/>
+			<xs:enumeration value="019"/>
+			<xs:enumeration value="021"/>
+			<xs:enumeration value="022"/>
+			<xs:enumeration value="101"/>
+			<xs:enumeration value="102"/>
+			<xs:enumeration value="103"/>
+			<xs:enumeration value="105"/>
+			<xs:enumeration value="106"/>
+			<xs:enumeration value="110"/>
+			<xs:enumeration value="120"/>
+			<xs:enumeration value="121"/>
+			<xs:enumeration value="122"/>
+			<xs:enumeration value="200"/>
+			<xs:enumeration value="210"/>
+			<xs:enumeration value="300"/>
+			<xs:enumeration value="310"/>
+			<xs:enumeration value="320"/>
+			<xs:enumeration value="400"/>
+			<xs:enumeration value="501"/>
+			<xs:enumeration value="510"/>
+			<xs:enumeration value="601"/>
+			<xs:enumeration value="602"/>
+			<xs:enumeration value="603"/>
+			<xs:enumeration value="604"/>
+			<xs:enumeration value="700"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeoCoordinatesDegreeMinuteSecondsFormatType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="-?1?\d{1,2}°[ ]?\d{1,2}'[ ]?\d{1,2}\.\d+''"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeoCoordinatesDecimalDegreeFormatType">
+		<xs:annotation>
+			<xs:documentation>Based on WGS84</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="-?1?\d{1,2}\.\d{1,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeoCoordinatesGoogleFormatType">
+		<xs:annotation>
+			<xs:documentation>Based on WGS84</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="-?1?\d{1,2}\.\d{1,6}\s*,?\s*-?1?\d{1,2}\.\d{1,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="GeoCoordinatesDegreeMinuteSecondsType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="Longitude" type="tns:GeoCoordinatesDegreeMinuteSecondsFormatType"/>
+			<xs:element maxOccurs="1" minOccurs="1" name="Latitude" type="tns:GeoCoordinatesDegreeMinuteSecondsFormatType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeoCoordinatesDecimalDegreeType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="Longitude" type="tns:GeoCoordinatesDecimalDegreeFormatType"/>
+			<xs:element maxOccurs="1" minOccurs="1" name="Latitude" type="tns:GeoCoordinatesDecimalDegreeFormatType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeoCoordinatesGoogleType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="Coordinates" type="tns:GeoCoordinatesGoogleFormatType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeoCoordinatesType">
+		<xs:annotation>
+			<xs:documentation>The data structure differsd epending on the chosen geo coordinates format.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Google" type="tns:GeoCoordinatesGoogleType"/>
+				<xs:element name="DecimalDegree" type="tns:GeoCoordinatesDecimalDegreeType"/>
+				<xs:element name="DegreeMinuteSeconds" type="tns:GeoCoordinatesDegreeMinuteSecondsType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="AuthorizationStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Authorized"/>
+			<xs:enumeration value="NotAuthorized"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeoCoordinatesResponseFormatType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Google"/>
+			<xs:enumeration value="DegreeMinuteSeconds"/>
+			<xs:enumeration value="DecimalDegree"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="SearchCenterType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="GeoCoordinates" type="tns:GeoCoordinatesType"/>
+			<xs:element maxOccurs="1" minOccurs="1" name="Radius">
+				<xs:annotation>
+					<xs:documentation>Radius in km around the position that is defined by the geo coordinates</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:totalDigits value="4"/>
+						<xs:fractionDigits value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="SessionIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{8}(-[A-Za-z0-9]{4}){3}-[A-Za-z0-9]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PhoneNumberType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\+[0-9]{5,15}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProductIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="Standardpreis|AC1|AC3|DC|.{0,100}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocalizedInfoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Z]{3}:.*\|\|\|)+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CountryCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="UNKNOWN"/>
+			<xs:enumeration value="ABW"/>
+			<xs:enumeration value="AFG"/>
+			<xs:enumeration value="AGO"/>
+			<xs:enumeration value="AIA"/>
+			<xs:enumeration value="ALA"/>
+			<xs:enumeration value="ALB"/>
+			<xs:enumeration value="AND"/>
+			<xs:enumeration value="ARE"/>
+			<xs:enumeration value="ARG"/>
+			<xs:enumeration value="ARM"/>
+			<xs:enumeration value="ASM"/>
+			<xs:enumeration value="ATA"/>
+			<xs:enumeration value="ATF"/>
+			<xs:enumeration value="ATG"/>
+			<xs:enumeration value="AUS"/>
+			<xs:enumeration value="AUT"/>
+			<xs:enumeration value="AZE"/>
+			<xs:enumeration value="BDI"/>
+			<xs:enumeration value="BEL"/>
+			<xs:enumeration value="BEN"/>
+			<xs:enumeration value="BES"/>
+			<xs:enumeration value="BFA"/>
+			<xs:enumeration value="BGD"/>
+			<xs:enumeration value="BGR"/>
+			<xs:enumeration value="BHR"/>
+			<xs:enumeration value="BHS"/>
+			<xs:enumeration value="BIH"/>
+			<xs:enumeration value="BLM"/>
+			<xs:enumeration value="BLR"/>
+			<xs:enumeration value="BLZ"/>
+			<xs:enumeration value="BMU"/>
+			<xs:enumeration value="BOL"/>
+			<xs:enumeration value="BRA"/>
+			<xs:enumeration value="BRB"/>
+			<xs:enumeration value="BRN"/>
+			<xs:enumeration value="BTN"/>
+			<xs:enumeration value="BVT"/>
+			<xs:enumeration value="BWA"/>
+			<xs:enumeration value="CAF"/>
+			<xs:enumeration value="CAN"/>
+			<xs:enumeration value="CCK"/>
+			<xs:enumeration value="CHE"/>
+			<xs:enumeration value="CHL"/>
+			<xs:enumeration value="CHN"/>
+			<xs:enumeration value="CIV"/>
+			<xs:enumeration value="CMR"/>
+			<xs:enumeration value="COD"/>
+			<xs:enumeration value="COG"/>
+			<xs:enumeration value="COK"/>
+			<xs:enumeration value="COL"/>
+			<xs:enumeration value="COM"/>
+			<xs:enumeration value="CPV"/>
+			<xs:enumeration value="CRI"/>
+			<xs:enumeration value="CUB"/>
+			<xs:enumeration value="CUW"/>
+			<xs:enumeration value="CXR"/>
+			<xs:enumeration value="CYM"/>
+			<xs:enumeration value="CYP"/>
+			<xs:enumeration value="CZE"/>
+			<xs:enumeration value="DEU"/>
+			<xs:enumeration value="DJI"/>
+			<xs:enumeration value="DMA"/>
+			<xs:enumeration value="DNK"/>
+			<xs:enumeration value="DOM"/>
+			<xs:enumeration value="DZA"/>
+			<xs:enumeration value="ECU"/>
+			<xs:enumeration value="EGY"/>
+			<xs:enumeration value="ERI"/>
+			<xs:enumeration value="ESH"/>
+			<xs:enumeration value="ESP"/>
+			<xs:enumeration value="EST"/>
+			<xs:enumeration value="ETH"/>
+			<xs:enumeration value="FIN"/>
+			<xs:enumeration value="FJI"/>
+			<xs:enumeration value="FLK"/>
+			<xs:enumeration value="FRA"/>
+			<xs:enumeration value="FRO"/>
+			<xs:enumeration value="FSM"/>
+			<xs:enumeration value="GAB"/>
+			<xs:enumeration value="GBR"/>
+			<xs:enumeration value="GEO"/>
+			<xs:enumeration value="GGY"/>
+			<xs:enumeration value="GHA"/>
+			<xs:enumeration value="GIN"/>
+			<xs:enumeration value="GLP"/>
+			<xs:enumeration value="GMB"/>
+			<xs:enumeration value="GNB"/>
+			<xs:enumeration value="GNQ"/>
+			<xs:enumeration value="GRC"/>
+			<xs:enumeration value="GRD"/>
+			<xs:enumeration value="GRL"/>
+			<xs:enumeration value="GTM"/>
+			<xs:enumeration value="GUF"/>
+			<xs:enumeration value="GUM"/>
+			<xs:enumeration value="GUY"/>
+			<xs:enumeration value="HKG"/>
+			<xs:enumeration value="HMD"/>
+			<xs:enumeration value="HND"/>
+			<xs:enumeration value="HRV"/>
+			<xs:enumeration value="HTI"/>
+			<xs:enumeration value="HUN"/>
+			<xs:enumeration value="IDN"/>
+			<xs:enumeration value="IMN"/>
+			<xs:enumeration value="IND"/>
+			<xs:enumeration value="IOT"/>
+			<xs:enumeration value="IRL"/>
+			<xs:enumeration value="IRN"/>
+			<xs:enumeration value="IRQ"/>
+			<xs:enumeration value="ISL"/>
+			<xs:enumeration value="ISR"/>
+			<xs:enumeration value="ITA"/>
+			<xs:enumeration value="JAM"/>
+			<xs:enumeration value="JEY"/>
+			<xs:enumeration value="JOR"/>
+			<xs:enumeration value="JPN"/>
+			<xs:enumeration value="KAZ"/>
+			<xs:enumeration value="KEN"/>
+			<xs:enumeration value="KGZ"/>
+			<xs:enumeration value="KHM"/>
+			<xs:enumeration value="KIR"/>
+			<xs:enumeration value="KNA"/>
+			<xs:enumeration value="KOR"/>
+			<xs:enumeration value="KWT"/>
+			<xs:enumeration value="LAO"/>
+			<xs:enumeration value="LBN"/>
+			<xs:enumeration value="LBR"/>
+			<xs:enumeration value="LBY"/>
+			<xs:enumeration value="LCA"/>
+			<xs:enumeration value="LIE"/>
+			<xs:enumeration value="LKA"/>
+			<xs:enumeration value="LSO"/>
+			<xs:enumeration value="LTU"/>
+			<xs:enumeration value="LUX"/>
+			<xs:enumeration value="LVA"/>
+			<xs:enumeration value="MAC"/>
+			<xs:enumeration value="MAF"/>
+			<xs:enumeration value="MAR"/>
+			<xs:enumeration value="MCO"/>
+			<xs:enumeration value="MDA"/>
+			<xs:enumeration value="MDG"/>
+			<xs:enumeration value="MDV"/>
+			<xs:enumeration value="MEX"/>
+			<xs:enumeration value="MHL"/>
+			<xs:enumeration value="MKD"/>
+			<xs:enumeration value="MLI"/>
+			<xs:enumeration value="MLT"/>
+			<xs:enumeration value="MMR"/>
+			<xs:enumeration value="MNE"/>
+			<xs:enumeration value="MNG"/>
+			<xs:enumeration value="MNP"/>
+			<xs:enumeration value="MOZ"/>
+			<xs:enumeration value="MRT"/>
+			<xs:enumeration value="MSR"/>
+			<xs:enumeration value="MTQ"/>
+			<xs:enumeration value="MUS"/>
+			<xs:enumeration value="MWI"/>
+			<xs:enumeration value="MYS"/>
+			<xs:enumeration value="MYT"/>
+			<xs:enumeration value="NAM"/>
+			<xs:enumeration value="NCL"/>
+			<xs:enumeration value="NER"/>
+			<xs:enumeration value="NFK"/>
+			<xs:enumeration value="NGA"/>
+			<xs:enumeration value="NIC"/>
+			<xs:enumeration value="NIU"/>
+			<xs:enumeration value="NLD"/>
+			<xs:enumeration value="NOR"/>
+			<xs:enumeration value="NPL"/>
+			<xs:enumeration value="NRU"/>
+			<xs:enumeration value="NZL"/>
+			<xs:enumeration value="OMN"/>
+			<xs:enumeration value="PAK"/>
+			<xs:enumeration value="PAN"/>
+			<xs:enumeration value="PCN"/>
+			<xs:enumeration value="PER"/>
+			<xs:enumeration value="PHL"/>
+			<xs:enumeration value="PLW"/>
+			<xs:enumeration value="PNG"/>
+			<xs:enumeration value="POL"/>
+			<xs:enumeration value="PRI"/>
+			<xs:enumeration value="PRK"/>
+			<xs:enumeration value="PRT"/>
+			<xs:enumeration value="PRY"/>
+			<xs:enumeration value="PSE"/>
+			<xs:enumeration value="PYF"/>
+			<xs:enumeration value="QAT"/>
+			<xs:enumeration value="REU"/>
+			<xs:enumeration value="ROU"/>
+			<xs:enumeration value="RUS"/>
+			<xs:enumeration value="RWA"/>
+			<xs:enumeration value="SAU"/>
+			<xs:enumeration value="SDN"/>
+			<xs:enumeration value="SEN"/>
+			<xs:enumeration value="SGP"/>
+			<xs:enumeration value="SGS"/>
+			<xs:enumeration value="SHN"/>
+			<xs:enumeration value="SJM"/>
+			<xs:enumeration value="SLB"/>
+			<xs:enumeration value="SLE"/>
+			<xs:enumeration value="SLV"/>
+			<xs:enumeration value="SMR"/>
+			<xs:enumeration value="SOM"/>
+			<xs:enumeration value="SPM"/>
+			<xs:enumeration value="SRB"/>
+			<xs:enumeration value="SSD"/>
+			<xs:enumeration value="STP"/>
+			<xs:enumeration value="SUR"/>
+			<xs:enumeration value="SVK"/>
+			<xs:enumeration value="SVN"/>
+			<xs:enumeration value="SWE"/>
+			<xs:enumeration value="SWZ"/>
+			<xs:enumeration value="SXM"/>
+			<xs:enumeration value="SYC"/>
+			<xs:enumeration value="SYR"/>
+			<xs:enumeration value="TCA"/>
+			<xs:enumeration value="TCD"/>
+			<xs:enumeration value="TGO"/>
+			<xs:enumeration value="THA"/>
+			<xs:enumeration value="TJK"/>
+			<xs:enumeration value="TKL"/>
+			<xs:enumeration value="TKM"/>
+			<xs:enumeration value="TLS"/>
+			<xs:enumeration value="TON"/>
+			<xs:enumeration value="TTO"/>
+			<xs:enumeration value="TUN"/>
+			<xs:enumeration value="TUR"/>
+			<xs:enumeration value="TUV"/>
+			<xs:enumeration value="TWN"/>
+			<xs:enumeration value="TZA"/>
+			<xs:enumeration value="UGA"/>
+			<xs:enumeration value="UKR"/>
+			<xs:enumeration value="UMI"/>
+			<xs:enumeration value="URY"/>
+			<xs:enumeration value="USA"/>
+			<xs:enumeration value="UZB"/>
+			<xs:enumeration value="VAT"/>
+			<xs:enumeration value="VCT"/>
+			<xs:enumeration value="VEN"/>
+			<xs:enumeration value="VGB"/>
+			<xs:enumeration value="VIR"/>
+			<xs:enumeration value="VNM"/>
+			<xs:enumeration value="VUT"/>
+			<xs:enumeration value="WLF"/>
+			<xs:enumeration value="WSM"/>
+			<xs:enumeration value="YEM"/>
+			<xs:enumeration value="ZAF"/>
+			<xs:enumeration value="ZMB"/>
+			<xs:enumeration value="ZWE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OpeningTimeMarkerType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Everyday"/>
+			<xs:enumeration value="Workdays"/>
+			<xs:enumeration value="Weekend"/>
+			<xs:enumeration value="Monday"/>
+			<xs:enumeration value="Tuesday"/>
+			<xs:enumeration value="Wednesday"/>
+			<xs:enumeration value="Thursday"/>
+			<xs:enumeration value="Friday"/>
+			<xs:enumeration value="Saturday"/>
+			<xs:enumeration value="Sunday"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PeriodType">
+		<xs:attribute name="begin" use="required">
+			<xs:annotation>
+				<xs:documentation>The period begin in HH:mm</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[0-9]{2}:[0-9]{2}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="end" use="required">
+			<xs:annotation>
+				<xs:documentation>The period end in HH:mm</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[0-9]{2}:[0-9]{2}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OpeningTimesType">
+		<xs:annotation>
+			<xs:documentation>Opening times
+                @since OICP 2.2
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" name="OpeningTime">
+				<xs:annotation>
+					<xs:documentation>An opening time entry</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="Period" type="tns:PeriodType"/>
+					</xs:sequence>
+					<xs:attribute name="on" type="tns:OpeningTimeMarkerType" use="required">
+						<xs:annotation>
+							<xs:documentation>The marker when opening time periods defined</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

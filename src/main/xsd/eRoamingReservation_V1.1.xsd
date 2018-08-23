@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.hubject.com/b2b/services/commontypes/v2.1" xmlns:st="http://www.hubject.com/eMobility/SBP" xmlns:tns="http://www.hubject.com/b2b/services/reservation/v1.1" elementFormDefault="qualified" targetNamespace="http://www.hubject.com/b2b/services/reservation/v1.1">
+	<xs:import namespace="http://www.hubject.com/b2b/services/commontypes/v2.1" schemaLocation="eRoamingCommonTypes_V2.1.xsd"/>
+	<xs:import namespace="http://www.hubject.com/eMobility/SBP" schemaLocation="eRoamingSimpleTypes.xsd"/>
+	<xs:element name="eRoamingAuthorizeRemoteReservationStart" type="tns:eRoamingAuthorizeRemoteReservationStart"/>
+	<xs:element name="eRoamingAuthorizeRemoteReservationStop" type="tns:eRoamingAuthorizeRemoteReservationStop"/>
+	<xs:complexType name="eRoamingAuthorizeRemoteReservationStart">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that
+identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The ProviderID is defined by
+Hubject and is used to identify
+the EMP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the
+charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="PartnerProductID" type="cmn:ProductIDType">
+				<xs:annotation>
+					<xs:documentation>Service specifics like e.g.
+“15min”.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="Duration">
+				<xs:annotation>
+					<xs:documentation>Duration of reservation in
+minutes</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizeRemoteReservationStop">
+		<xs:sequence>
+			<xs:element name="SessionID" type="cmn:SessionIDType"/>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProviderID" type="cmn:ProviderIDType"/>
+			<xs:element name="EvseID" type="cmn:EvseIDType"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.hubject.com/b2b/services/commontypes/v2.1" xmlns:tns="http://www.hubject.com/b2b/services/authenticationdata/v2.1" elementFormDefault="qualified" targetNamespace="http://www.hubject.com/b2b/services/authenticationdata/v2.1">
+	<xs:import namespace="http://www.hubject.com/b2b/services/commontypes/v2.1" schemaLocation="eRoamingCommonTypes_V2.1.xsd"/>
+	<xs:element name="eRoamingPushAuthenticationData" type="tns:eRoamingPushAuthenticationData"/>
+	<xs:element name="eRoamingPullAuthenticationData" type="tns:eRoamingPullAuthenticationData"/>
+	<xs:element name="eRoamingAuthenticationData" type="tns:eRoamingAuthenticationData"/>
+	<xs:complexType name="eRoamingPushAuthenticationData">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="ActionType">
+				<xs:annotation>
+					<xs:documentation>Describes the
+action that has to
+be performed by
+Hubject with the
+provided data</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="fullLoad"/>
+						<xs:enumeration value="update"/>
+						<xs:enumeration value="insert"/>
+						<xs:enumeration value="delete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="ProviderAuthenticationData" type="tns:ProviderAuthenticationDataType">
+				<xs:annotation>
+					<xs:documentation>Provider
+information</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingPullAuthenticationData">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="OperatorID" type="cmn:OperatorIDType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthenticationData">
+		<xs:sequence>
+			<xs:element name="AuthenticationData">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="ProviderAuthenticationData" type="tns:ProviderAuthenticationDataType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" name="StatusCode" type="cmn:StatusCodeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProviderAuthenticationDataType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The EMP whose
+data records are
+listed below</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="AuthenticationDataRecord" type="tns:AuthenticationDataRecordType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthenticationDataRecordType">
+		<xs:sequence>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

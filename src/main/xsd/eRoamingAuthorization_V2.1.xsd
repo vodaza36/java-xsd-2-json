@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.hubject.com/b2b/services/commontypes/v2.1" xmlns:st="http://www.hubject.com/eMobility/SBP" xmlns:tns="http://www.hubject.com/b2b/services/authorization/v2.1" elementFormDefault="qualified" targetNamespace="http://www.hubject.com/b2b/services/authorization/v2.1">
+	<xs:import namespace="http://www.hubject.com/b2b/services/commontypes/v2.1" schemaLocation="eRoamingCommonTypes_V2.1.xsd"/>
+	<xs:import namespace="http://www.hubject.com/eMobility/SBP" schemaLocation="eRoamingSimpleTypes.xsd"/>
+	<xs:element name="eRoamingAuthorizeStart" type="tns:eRoamingAuthorizeStart">
+		<xs:annotation>
+			<xs:documentation>eRoamingAuthorizeStart is a message to request an authorization for starting a charging process</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="eRoamingAuthorizationStart" type="tns:eRoamingAuthorizationStart"/>
+	<xs:element name="eRoamingAuthorizeStop" type="tns:eRoamingAuthorizeStop">
+		<xs:annotation>
+			<xs:documentation>eRoamingAuthorizeStop is a message to request an authorization for stopping a charging process.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="eRoamingAuthorizationStop" type="tns:eRoamingAuthorizationStop"/>
+	<xs:element name="eRoamingAuthorizeRemoteStart" type="tns:eRoamingAuthorizeRemoteStart"/>
+	<xs:element name="eRoamingAuthorizeRemoteStop" type="tns:eRoamingAuthorizeRemoteStop"/>
+	<xs:element name="eRoamingChargeDetailRecord" type="tns:eRoamingChargeDetailRecord"/>
+	<xs:element name="eRoamingGetChargeDetailRecords" type="tns:eRoamingGetChargeDetailRecords"/>
+	<xs:element name="eRoamingChargeDetailRecords" type="tns:eRoamingChargeDetailRecords"/>
+	<xs:complexType name="eRoamingAuthorizeStart">
+		<xs:annotation>
+			<xs:documentation>eRoamingAuthorizeStart is a message to request an authorization for starting a charging process</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperatorID" type="cmn:OperatorIDType">
+				<xs:annotation>
+					<xs:documentation>The OperatorID is defined by Hubject and is used to identify the CPO</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data used to authorize the user or car</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="PartnerProductID" type="cmn:ProductIDType">
+				<xs:annotation>
+					<xs:documentation>Service specifics like e.g. 'fast charging'</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizationStart">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process (in case of successful authorization)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The ProviderID is defined by  Hubject and is used to identify the EMP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AuthorizationStatus" type="cmn:AuthorizationStatusType">
+				<xs:annotation>
+					<xs:documentation>Information specifying whether the user is authorized to charge or not</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StatusCode" type="cmn:StatusCodeType">
+				<xs:annotation>
+					<xs:documentation>Structured status details</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="AuthorizationStopIdentifications">
+				<xs:annotation>
+					<xs:documentation>A list of Identification data that is authorized to stop the charging process</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="Identification" type="cmn:IdentificationType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizeStop">
+		<xs:annotation>
+			<xs:documentation>eRoamingAuthorizeStop is a message to request an authorization for stopping a charging process.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperatorID" type="cmn:OperatorIDType">
+				<xs:annotation>
+					<xs:documentation>The OperatorID is defined by Hubject and is used to identify the CPO</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data used to authorize the user or car</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizationStop">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process (in case of successful authorization)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The ProviderID is defined by  Hubject and is used to identify the EMP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AuthorizationStatus" type="cmn:AuthorizationStatusType">
+				<xs:annotation>
+					<xs:documentation>Information specifying whether the user is authorized to charge or not</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StatusCode" type="cmn:StatusCodeType">
+				<xs:annotation>
+					<xs:documentation>Structured status details</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizeRemoteStart">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The ProviderID is defined by  Hubject and is used to identify the EMP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data used to authorize the user or car</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="PartnerProductID" type="cmn:ProductIDType">
+				<xs:annotation>
+					<xs:documentation>Service specifics like e.g. 'fast charging'</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingAuthorizeRemoteStop">
+		<xs:sequence>
+			<xs:element name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>The ProviderID is defined by  Hubject and is used to identify the EMP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingChargeDetailRecord">
+		<xs:annotation>
+			<xs:documentation>eRoamingChargeDetailRecord is a message informing about charging process details (e.g. meter values).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SessionID" type="cmn:SessionIDType">
+				<xs:annotation>
+					<xs:documentation>The Hubject SessionID that identifies the process</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="EMPPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>EMP partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="CPOPartnerSessionID" type="st:String255">
+				<xs:annotation>
+					<xs:documentation>CPO partner session id
+Partner systems can use this field in order to relate the process to their own session handling
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="PartnerProductID" type="cmn:ProductIDType"/>
+			<xs:element name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Identification" type="cmn:IdentificationType">
+				<xs:annotation>
+					<xs:documentation>Authentication data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ChargingStart" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>The date and time at which the charging process started</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ChargingEnd" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>The date and time at which the charging process stopped</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SessionStart" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>The date and time at which the session started, e.g. swipe of RFID or cable connected.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SessionEnd" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>The date and time at which the session ended. E. g. Swipe of RFID or Cable disconnected</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="MeterValueStart">
+				<xs:annotation>
+					<xs:documentation>The starting meter value in kWh</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:fractionDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element minOccurs="0" name="MeterValueEnd">
+				<xs:annotation>
+					<xs:documentation>The ending meter value in kWh</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:fractionDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element minOccurs="0" name="MeterValueInBetween">
+				<xs:annotation>
+					<xs:documentation>List of meter values that may have been taken in between (kWh)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="MeterValue">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:fractionDigits value="3"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" name="ConsumedEnergy">
+				<xs:annotation>
+					<xs:documentation>The difference between MeterValueEnd and MeterValueStart in kWh</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:fractionDigits value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element minOccurs="0" name="MeteringSignature" type="st:String200">
+				<xs:annotation>
+					<xs:documentation>Meta data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="HubOperatorID" type="cmn:OperatorIDType">
+				<xs:annotation>
+					<xs:documentation>Hub operator</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="HubProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>Hub provider</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingGetChargeDetailRecords">
+		<xs:sequence>
+			<xs:element name="ProviderID" type="cmn:ProviderIDType"/>
+			<xs:element minOccurs="1" name="From" type="xs:dateTime"/>
+			<xs:element minOccurs="1" name="To" type="xs:dateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingChargeDetailRecords">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="eRoamingChargeDetailRecord" type="tns:eRoamingChargeDetailRecord"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

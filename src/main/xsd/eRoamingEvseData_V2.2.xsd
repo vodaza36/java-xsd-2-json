@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.hubject.com/b2b/services/commontypes/v2.1" xmlns:st="http://www.hubject.com/eMobility/SBP" xmlns:tns="http://www.hubject.com/b2b/services/evsedata/v2.2" elementFormDefault="qualified" targetNamespace="http://www.hubject.com/b2b/services/evsedata/v2.2">
+	<xs:import namespace="http://www.hubject.com/b2b/services/commontypes/v2.1" schemaLocation="eRoamingCommonTypes_V2.1.xsd"/>
+	<xs:import namespace="http://www.hubject.com/eMobility/SBP" schemaLocation="eRoamingSimpleTypes.xsd"/>
+	<xs:element name="eRoamingPushEvseData" type="tns:eRoamingPushEvseData"/>
+	<xs:element name="eRoamingPullEvseData" type="tns:eRoamingPullEvseData">
+		<xs:annotation>
+			<xs:documentation>Pull EVSE data request</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="eRoamingEvseData" type="tns:eRoamingEvseData"/>
+	<xs:element name="eRoamingEvseDataRecord" type="tns:EvseDataRecordType"/>
+	<xs:complexType name="eRoamingPushEvseData">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="ActionType">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="fullLoad"/>
+						<xs:enumeration value="update"/>
+						<xs:enumeration value="insert"/>
+						<xs:enumeration value="delete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="OperatorEvseData" type="tns:OperatorEvseDataType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingPullEvseData">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="ProviderID" type="cmn:ProviderIDType">
+				<xs:annotation>
+					<xs:documentation>Identifies the provider</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element maxOccurs="1" minOccurs="0" name="SearchCenter" type="cmn:SearchCenterType">
+					<xs:annotation>
+						<xs:documentation>The data can be restricted using search
+parameters that are provided in this field.
+Cannot be combined with “LastCall”.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element maxOccurs="1" minOccurs="0" name="LastCall" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation>In case that this field is set, Hubject does
+not return the currently valid set of EVSE
+data but the changes compared to the
+status of EVSE data at the time of the last
+call.
+Cannot be combined with “SearchCenter”.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="OperatorIDs">
+					<xs:annotation>
+						<xs:documentation>A list of Operator Ids in ISO or DIN
+standard to download only EVSE´s of one or more operators
+@since OICP 2.2</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" name="OperatorID" type="cmn:OperatorIDType"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element minOccurs="0" name="CountryCodes">
+					<xs:annotation>
+						<xs:documentation>A list of countries whose EVSE´s a
+provider wants to retrieve
+@since OICP 2.2</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" name="CountryCode" type="cmn:CountryCodeType"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:element maxOccurs="1" minOccurs="1" name="GeoCoordinatesResponseFormat" type="cmn:GeoCoordinatesResponseFormatType">
+				<xs:annotation>
+					<xs:documentation>Defines the format of geo coordinates that
+shall be provided with the response</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="eRoamingEvseData">
+		<xs:sequence>
+			<xs:element name="EvseData">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="OperatorEvseData" type="tns:OperatorEvseDataType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" name="StatusCode" type="cmn:StatusCodeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OperatorEvseDataType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="OperatorID" type="cmn:OperatorIDType"/>
+			<xs:element maxOccurs="1" minOccurs="0" name="OperatorName" type="st:String100"/>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="EvseDataRecord" type="tns:EvseDataRecordType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EvseDataRecordType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="EvseID" type="cmn:EvseIDType">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging spot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="ChargingStationID" type="st:String50">
+				<xs:annotation>
+					<xs:documentation>The ID that identifies the charging station</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="ChargingStationName" type="st:String50">
+				<xs:annotation>
+					<xs:documentation>Name of the charging station</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="EnChargingStationName" type="st:String50">
+				<xs:annotation>
+					<xs:documentation>Name of the charging station in English</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ChargingPoolID" type="tns:ChargingPoolIDType">
+				<xs:annotation>
+					<xs:documentation>Evses may be grouped by using a charging pool id
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="Address" type="cmn:AddressIso19773Type">
+				<xs:annotation>
+					<xs:documentation>Address of the charging station</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="GeoCoordinates" type="cmn:GeoCoordinatesType">
+				<xs:annotation>
+					<xs:documentation>Location of the charging station</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="Plugs" type="tns:PlugList">
+				<xs:annotation>
+					<xs:documentation>List of plugs that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="ChargingFacilities" type="tns:ChargingFacilityList">
+				<xs:annotation>
+					<xs:documentation>List of facilities that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="ChargingModes" type="tns:ChargingModeList">
+				<xs:annotation>
+					<xs:documentation>List of charging modes that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="AuthenticationModes" type="tns:AuthenticationModeList">
+				<xs:annotation>
+					<xs:documentation>List of authentication modes that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="MaxCapacity" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Maximum capacity in kWh</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="PaymentOptions" type="tns:PaymentOptionsList">
+				<xs:annotation>
+					<xs:documentation>List of payment options that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="ValueAddedServices" type="tns:ValueAddedServicesList">
+				<xs:annotation>
+					<xs:documentation>List of value added services that are supported</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="Accessibility" type="tns:AccessibilityType">
+				<xs:annotation>
+					<xs:documentation>Specifies how the charging station can be accessed</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="HotlinePhoneNumber" type="cmn:PhoneNumberType">
+				<xs:annotation>
+					<xs:documentation>Phone number of a hotline of the charging station operator</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="AdditionalInfo">
+				<xs:annotation>
+					<xs:documentation>Additional info on different languages
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="InfoText" type="tns:InfoTextType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="GeoChargingPointEntrance" type="cmn:GeoCoordinatesType">
+				<xs:annotation>
+					<xs:documentation>In case that the charging spot is part of a bigger facility, this attribute specifies the facilities entrance coordinates</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="IsOpen24Hours" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Set in case the charging spot is open 24 hours</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="OpeningTimes" type="cmn:OpeningTimesType">
+				<xs:annotation>
+					<xs:documentation>Opening times
+@since OICP 2.2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="HubOperatorID" type="cmn:OperatorIDType">
+				<xs:annotation>
+					<xs:documentation>Hub operator</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="ClearinghouseID" type="st:String20">
+				<xs:annotation>
+					<xs:documentation>Identification of the clearing house in case of roaming between different clearing houses must be processed in the future</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="IsHubjectCompatible" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Is eRoaming via intercharge at this charging station possible?</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="DynamicInfoAvailable" type="tns:DynamicInfoType">
+				<xs:annotation>
+					<xs:documentation>Does the operator send a EVSEStatus information for this EVSERecord?</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="deltaType" use="optional">
+			<xs:annotation>
+				<xs:documentation>Changes compared to the last call in case that the operation was “PullEVSEData” with “LastCall” parameter.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="insert"/>
+					<xs:enumeration value="update"/>
+					<xs:enumeration value="delete"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lastUpdate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>The attribute indicates the date and time of the last update of the record.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ChargingFacilityList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="ChargingFacility" type="tns:ChargingFacilityType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ChargingModeList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="ChargingMode" type="tns:ChargingModeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthenticationModeList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="AuthenticationMode" type="tns:AuthenticationModeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentOptionsList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="PaymentOption" type="tns:PaymentOptionType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ValueAddedServicesList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="ValueAddedService" type="tns:ValueAddedServiceType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlugList">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="Plug" type="tns:PlugType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PlugType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Small Paddle Inductive"/>
+			<xs:enumeration value="Large Paddle Inductive"/>
+			<xs:enumeration value="AVCON Connector"/>
+			<xs:enumeration value="Tesla Connector"/>
+			<xs:enumeration value="NEMA 5-20"/>
+			<xs:enumeration value="Type E French Standard"/>
+			<xs:enumeration value="Type F Schuko"/>
+			<xs:enumeration value="Type G British Standard"/>
+			<xs:enumeration value="Type J Swiss Standard"/>
+			<xs:enumeration value="Type 1 Connector (Cable Attached)"/>
+			<xs:enumeration value="Type 2 Outlet"/>
+			<xs:enumeration value="Type 2 Connector (Cable Attached)"/>
+			<xs:enumeration value="Type 3 Outlet"/>
+			<xs:enumeration value="IEC 60309 Single Phase"/>
+			<xs:enumeration value="IEC 60309 Three Phase"/>
+			<xs:enumeration value="CCS Combo 2 Plug (Cable Attached)"/>
+			<xs:enumeration value="CCS Combo 1 Plug (Cable Attached)"/>
+			<xs:enumeration value="CHAdeMO"/>
+			<xs:enumeration value="Unspecified"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ChargingFacilityType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="PowerType">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="AC_1_PHASE"/>
+						<xs:enumeration value="AC_3_PHASE"/>
+						<xs:enumeration value="DC"/>
+						<xs:enumeration value="Unspecified"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element minOccurs="0" name="Voltage" type="xs:int"/>
+			<xs:element minOccurs="0" name="Amperage" type="xs:int"/>
+			<xs:element minOccurs="0" name="Power" type="xs:decimal">
+				<xs:annotation>
+					<xs:documentation>Power (decimal) in KW</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="AccessibilityType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Unspecified"/>
+			<xs:enumeration value="Free publicly accessible"/>
+			<xs:enumeration value="Restricted access"/>
+			<xs:enumeration value="Paying publicly accessible"/>
+			<xs:enumeration value="Test Station"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ChargingModeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Mode_1"/>
+			<xs:enumeration value="Mode_2"/>
+			<xs:enumeration value="Mode_3"/>
+			<xs:enumeration value="Mode_4"/>
+			<xs:enumeration value="CHAdeMO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AuthenticationModeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NFC RFID Classic"/>
+			<xs:enumeration value="NFC RFID DESFire"/>
+			<xs:enumeration value="PnC"/>
+			<xs:enumeration value="REMOTE"/>
+			<xs:enumeration value="Direct Payment"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PaymentOptionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="No Payment"/>
+			<xs:enumeration value="Direct"/>
+			<xs:enumeration value="Contract"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ValueAddedServiceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Reservation"/>
+			<xs:enumeration value="DynamicPricing"/>
+			<xs:enumeration value="ParkingSensors"/>
+			<xs:enumeration value="MaximumPowerCharging"/>
+			<xs:enumeration value="PredictiveChargePointUsage"/>
+			<xs:enumeration value="ChargingPlans"/>
+			<xs:enumeration value="None"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DynamicInfoType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="true"/>
+			<xs:enumeration value="false"/>
+			<xs:enumeration value="auto"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="InfoTextType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="lang">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[a-z]{2,3}(-[A-Z]{2,3}(-[a-zA-Z]{4})?)?(-x-[a-zA-Z0-9]{1,8})?"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="ChargingPoolIDType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z]{2}\*?[A-Za-z0-9]{3}\*?P[A-Za-z0-9\*]{1,30})"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
